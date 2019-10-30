@@ -1,0 +1,28 @@
+@import "../../assets/constants/constants.scss";
+
+.footer {
+  background-color: #414141;
+  padding: 1% 15%;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  color: $mainTextColor;
+}
+
+@media (max-width: $fulhdDesktop) {
+  .footer {
+    padding: 1% $leftPaddingLaptop;
+  }
+}
+
+@media (max-width: $laptop) {
+  .footer {
+    padding: 1% $leftPaddingTablet;
+  }
+}
+
+@media (max-width: $tablet) {
+  .footer {
+    padding: 1% 5%;
+  }
+}
