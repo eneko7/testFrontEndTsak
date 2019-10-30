@@ -9,6 +9,7 @@ const config = require('./webpack.config');
 const app = express();
 
 app.use('/build', express.static(path.resolve(__dirname, './build')));
+app.use(helmet.frameguard({ action: 'sameorigin' }));
 
 if (process.env.NODE_ENV === 'development') {
   const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -22,7 +23,7 @@ if (process.env.NODE_ENV === 'development') {
   }));
 
   app.use(webpackHotMiddleware(compiler));
-  app.use(helmet.frameguard({ action: 'sameorigin' }));
+
   app.use('*', (req, res, next) => {
     const filename = path.join(compiler.outputPath, '/index.html');
     compiler.outputFileSystem.readFile(filename, (err, result) => {
@@ -30,18 +31,18 @@ if (process.env.NODE_ENV === 'development') {
         return next(err);
       }
       res.set('content-type', 'text/html');
-      res.set('X-Frame-Options', 'sameorigin');
       res.send(result);
       return res.end();
     });
   });
 } else {
   app.use(express.static(path.join(__dirname, '/build')));
-  app.use(helmet.frameguard({ action: 'sameorigin' }));
+
   app.get('*', (req, res) => {
     res.sendFile(path.join(`${__dirname}/build/index.html`));
   });
 }
+
 app.listen(process.env.PORT || 3000, () => {
   console.log('Example app listening on port 3000!\n');
 });
