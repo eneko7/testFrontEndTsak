@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
 import Input from '../commonComponent/Input';
 import Button from '../commonComponent/Button';
@@ -6,11 +8,12 @@ import styles from './HomeContent.scss';
 class HomeContent extends Component {
   constructor() {
     super();
+    this.iFrameRef = React.createRef();
     this.state = {
       searchTerm: '',
       showResults: false,
+      iframeContent: '',
     };
-    this.iFrameRef = React.createRef();
   }
 
   onChangeInputHendler = (e) => {
@@ -22,11 +25,18 @@ class HomeContent extends Component {
   onClickButtonHendler = () => {
     const { searchTerm } = this.state;
     if (searchTerm && searchTerm !== '') {
+      const search = searchTerm.replace(/ /g, '+');
       this.setState({
         showResults: true,
+      }, () => {
+        this.iFrameRef.current.src = `https://www.google.com/search?igu=1&ei=&q=${search}`;
+        setTimeout(() => {
+          console.log(this.iFrameRef.current.contentWindow);
+        }, 1000);
+        this.setState({
+          iframeContent: '',
+        });
       });
-      const search = searchTerm.replace(/ /g, '+');
-      this.iFrameRef.current.src = `https://www.google.com/search?igu=1&ei=&q=${search}`;
     }
   };
 
@@ -37,7 +47,8 @@ class HomeContent extends Component {
   };
 
   render() {
-    const { searchTerm, showResults } = this.state;
+    const { searchTerm, showResults, iframeContent } = this.state;
+    console.log(iframeContent);
     return (
       <div className={styles.content}>
         <Input
@@ -49,15 +60,19 @@ class HomeContent extends Component {
           enterPress={this.enterPress}
         />
         <Button text="Search" action={this.onClickButtonHendler} />
-        <div className={styles.content_searchingResultWrapper} style={{ display: showResults ? 'block' : 'none' }}>
-          <div className={styles.content_searchResultTitle}>
-            Searching results by query&nbsp;&nbsp;
-            <span className={styles.queryWord}>{searchTerm}</span>
+        { showResults
+          && (
+          <div className={styles.content_searchingResultWrapper}>
+            <div className={styles.content_searchResultTitle}>
+                Searching results by query&nbsp;&nbsp;
+              <span className={styles.queryWord}>{searchTerm}</span>
+            </div>
+            <div className={styles.results}>
+              <iframe ref={this.iFrameRef} title="searhResult" className={styles.iframeResults} onClick={this.clickHandleOnIframe} />
+            </div>
           </div>
-          <div className={styles.results}>
-            <iframe ref={this.iFrameRef} title="searhResult" className={styles.iframeResults} />
-          </div>
-        </div>
+          )
+        }
       </div>
     );
   }
