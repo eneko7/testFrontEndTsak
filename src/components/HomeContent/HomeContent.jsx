@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react';
 import Input from '../commonComponent/Input';
 import Button from '../commonComponent/Button';
@@ -8,12 +6,11 @@ import styles from './HomeContent.scss';
 class HomeContent extends Component {
   constructor() {
     super();
-    this.iFrameRef = React.createRef();
     this.state = {
       searchTerm: '',
       showResults: false,
-      iframeContent: '',
     };
+    this.iFrameRef = React.createRef();
   }
 
   onChangeInputHendler = (e) => {
@@ -30,12 +27,6 @@ class HomeContent extends Component {
         showResults: true,
       }, () => {
         this.iFrameRef.current.src = `https://www.google.com/search?igu=1&ei=&q=${search}`;
-        setTimeout(() => {
-          console.log(this.iFrameRef.current.contentWindow);
-        }, 1000);
-        this.setState({
-          iframeContent: '',
-        });
       });
     }
   };
@@ -47,8 +38,7 @@ class HomeContent extends Component {
   };
 
   render() {
-    const { searchTerm, showResults, iframeContent } = this.state;
-    console.log(iframeContent);
+    const { searchTerm, showResults } = this.state;
     return (
       <div className={styles.content}>
         <Input
@@ -68,7 +58,7 @@ class HomeContent extends Component {
               <span className={styles.queryWord}>{searchTerm}</span>
             </div>
             <div className={styles.results}>
-              <iframe ref={this.iFrameRef} title="searhResult" className={styles.iframeResults} onClick={this.clickHandleOnIframe} />
+              <iframe ref={this.iFrameRef} title="searhResult" className={styles.iframeResults} />
             </div>
           </div>
           )
