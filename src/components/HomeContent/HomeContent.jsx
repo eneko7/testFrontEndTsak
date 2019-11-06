@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import SearchResult from './SearchResult';
 import Input from '../commonComponent/Input';
 import Button from '../commonComponent/Button';
 import styles from './HomeContent.scss';
 
+const urlGoogle = 'https://www.google.com/search?igu=1&ei=&q=';
 class HomeContent extends Component {
   constructor() {
     super();
@@ -26,7 +28,7 @@ class HomeContent extends Component {
       this.setState({
         showResults: true,
       }, () => {
-        this.iFrameRef.current.src = `https://www.google.com/search?igu=1&ei=&q=${search}`;
+        this.iFrameRef.current.src = `${urlGoogle}${search}`;
       });
     }
   };
@@ -50,19 +52,7 @@ class HomeContent extends Component {
           enterPress={this.enterPress}
         />
         <Button text="Search" action={this.onClickButtonHendler} />
-        { showResults
-          && (
-          <div className={styles.content_searchingResultWrapper}>
-            <div className={styles.content_searchResultTitle}>
-                Searching results by query&nbsp;&nbsp;
-              <span className={styles.queryWord}>{searchTerm}</span>
-            </div>
-            <div className={styles.results}>
-              <iframe ref={this.iFrameRef} title="searhResult" className={styles.iframeResults} />
-            </div>
-          </div>
-          )
-        }
+        { showResults && <SearchResult iRef={this.iFrameRef} searchTerm={searchTerm} /> }
       </div>
     );
   }

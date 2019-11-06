@@ -4,29 +4,6 @@
   background-color: $mainBackgroundColor;
   height: calc(100vh - 5%);
   padding: 1% 15%;
-
-  .content_searchingResultWrapper {
-    margin-top: 30px;
-    padding: 20px 0;
-    width: 100%;
-
-    .content_searchResultTitle {
-      font-size: 20px;
-      color: $mainTextColor;
-      display: block;
-      margin: 10px 0 20px;
-
-      .queryWord {
-        color: $queryWordColor;
-        font-weight: bold;
-      }
-    }
-
-    .iframeResults {
-      width: 100%;
-      height: 70vh;
-    }
-  }
 }
 
 @media (max-width: $fulhdDesktop) {
